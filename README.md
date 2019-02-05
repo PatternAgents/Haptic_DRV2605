@@ -1,6 +1,6 @@
 # Haptic_DRV2605 Arduino Library
 
-[![Github Releases](https://img.shields.io/github/release/patternagents/Haptic_DRV2605.svg)](https://github.com/patternagents/Haptic_DRV2605/releases)
+[![Github Releases](https://img.shields.io/github/releases/patternagents/Haptic_DRV2605.svg)](https://github.com/patternagents/Haptic_DRV2605/releases/)
 [![Github Issues](https://img.shields.io/github/issues/patternagents/Haptic_DRV2605.svg)](https://github.com/patternagents/Haptic_DRV2605/issues)
 [![Github License](https://img.shields.io/badge/License-GNU3-green.svg)](https://github.com/patternagents/Haptic_DRV2605/)
 [![Github stars](https://img.shields.io/github/stars/patternagents/Haptic_DRV2605.svg)](https://github.com/patternagents/Haptic_DRV2605/)
