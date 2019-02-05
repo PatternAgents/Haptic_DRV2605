@@ -16,19 +16,21 @@ Repository Contents
 
 ## Documentation
 --------------
+
 * **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
 
 ## Products that use this Library 
 ---------------------------------
+
 (with integrated accelerometer)
 * [DRV2605L FeatherWing](http://patternagents.com/store/) - PatternAgents DRV2605L FeatherWing
 
 ## Compatible Products that (can) use this Library 
 ------------------------------------------------
+
 (NO integrated accelerometer)
 * [ROB-14538](https://www.sparkfun.com/products/14538) - SparkFun Haptic Motor Driver Breakout
 * [ID-2305](https://www.adafruit.com/product/2305) - Adafruit DRV2605L Haptic Motor Controller Breakout
-
 
 ## Version History
 ---------------
