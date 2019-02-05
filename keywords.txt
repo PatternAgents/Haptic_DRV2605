@@ -1,0 +1,10 @@
+Haptic_DRV2605	KEYWORD1
+readReg	        KEYWORD2
+writeReg        KEYWORD2
+writeRegBits	KEYWORD2
+writeRegBulk	KEYWORD2
+setMode     	KEYWORD2
+setEffect     	KEYWORD2
+getEffects     	KEYWORD2
+getDeviceID    	KEYWORD2
+go	     	KEYWORD2
