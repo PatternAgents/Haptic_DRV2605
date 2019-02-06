@@ -20,7 +20,7 @@
 ## Products that use this Library 
 
 (with integrated accelerometer)
-* [DRV2605L FeatherWing](http://patternagents.com/store/) - PatternAgents DRV2605L FeatherWing
+* [DRV2605L FeatherWing](https://github.com/PatternAgents/Agent-DRV2605-FeatherWing) - PatternAgents DRV2605L FeatherWing
 
 ## Compatible Products that (can) use this Library 
 
