@@ -1,10 +1,10 @@
 /*
- * ERM_Basic : Arduino IDE ERM example for TI DRV2605
+ * complex : Arduino IDE Complex ERM example for TI DRV2605
  * 
  * Overview:
  * --------- 
  * This simple example for the ERM actuator types runs through 
- * all the effects in sequence.
+ * all the complex (scripted) sequences.
  * 
  * Requirements:
  * -------------
@@ -15,14 +15,6 @@
  * 1) compile and Upload the sketch
  * 2) open the Serial Monitor
  *       
- *  Actuator Meta-Data :
- * 	Mfg        : Best Tong 
- * 	Model      : A0000051
- * 	Type       : ERM
- * 	Format     : Bar
- * 	Volatage   : 1.5V to 3.7V
- * 	RPM        : 7000 - 12000 ?(9000 RPM @  3.3 Volts)?
- * 	Dimensions : 0.45 x 3.15 x 3.85 inches (1.1 x 8.0 x 9.8 cm)
  * 
  * DRV2605 :  Immersion Libs Patented Waveform Libraries (under License with DRV2605)
  *
@@ -40,16 +32,16 @@
  */
 
 #include "Haptic_DRV2605.h"
-Haptic_DRV2605 haptic;             // Basic I2C instance - only SDA/SCL pins used
-int           waveform = 0;        // current waveform
-int           waveforms_max = 0;   // max waveforms available (we'll ask...)
+Haptic_DRV2605 haptic;           // Basic I2C instance - only SDA/SCL pins used
+int           script;        // current script
+int           scripts_max;   // max scripts available
 
 void setup() {
   Serial.begin(115200);
    while (!Serial) {
     ; // wait for serial port to connect. Needed to see startup messages...
   }
-  Serial.println("Haptic: ERM Driver Basic Tests");
+  Serial.println("Haptic: Complex Sequence Tests");
   Serial.println("Haptic: Connect I2C pins to WIRE Pins (SDA, SCL)");
 
   // initialize the Haptic controller
@@ -61,17 +53,17 @@ void setup() {
       // config the DRV2605 chip
       haptic.setActuatorType(ERM);              // pick an actuator type
       haptic.setMode(REGISTER_MODE);            // haptic effects triggered by I2C register write 
-      waveforms_max = haptic.getWaveforms();    // how many waveforms available?
+      scripts_max = haptic.getScripts();        // how many total scripts available?
+      script = ACTUATOR_SCRIPT_COMPLEX;         // start at the complex ones
   }       
 }
 
 void loop() {
-  Serial.print("Waveform #");                   // which waveform
-  Serial.println(waveform);
-  haptic.setWaveform(0, waveform);              // set the first sequence
-  haptic.setWaveform(1, 0);                     // end the sequence
-  haptic.goWait();				                      // play the waveform
-  delay(100);					                          // wait for a while
-  waveform++;					                          // next waveform
-  if (waveform >= waveforms_max) waveform = 0;  // loop through all the waveforms
+  Serial.print("Script #");                 // which script
+  Serial.println(script);
+  haptic.playScript(script);				        // play the script
+  delay(1000);					                    // wait for a while
+  script++;					                        // next script
+  if (script >= scripts_max) script = ACTUATOR_SCRIPT_COMPLEX;
 }
+ 

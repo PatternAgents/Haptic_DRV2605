@@ -41,17 +41,30 @@
 #define ACTUATOR_OVERIDE_VAL		0x59
 #define ACTUATOR_SEQ_ID				7
 #define ACTUATOR_SEQ_LOOP			3
-#define ACTUATOR_SEQ_ID_MAX			15				//! SEQ_ID should not be larger than 15 (0 <= X <= 15) 
+#define ACTUATOR_SEQ_ID_MAX			15		    //! SEQ_ID should not be larger than 15 (0 <= X <= 15) 
 #define ACTUATOR_SEQ_LOOP_MAX		15
 #define ACTUATOR_GPI_0_SEQ_ID		7
+#define ACTUATOR_SCRIPT_GOWAIT		0xFD
 #define ACTUATOR_SCRIPT_DELAY		0xFE
 #define ACTUATOR_SCRIPT_END			0xFF
 #define ACTUATOR_SCRIPT_MAX			16
+#define ACTUATOR_SCRIPT_COMPLEX		 5          //! start of complex scripts
+
 //! ----------------------------------------------------------
 #define HAPTIC_CHIP_ID				0x07
 
-#define SUCCESS 0
-#define FAIL   -1
+#define HAPTIC_SUCCESS			 0	/*!< success = no errors             */
+#define HAPTIC_FAIL             -1  /*!< general failure - cause unknown */
+#define HAPTIC_TIMEOUT			-2  /*!< timeout occurred                */
+#define HAPTIC_BUSY				-3  /*!< timeout occurred                */
+#define HAPTIC_ILL_ARG			-4  /*!< illegal command                 */
+#define HAPTIC_ILL_STATE		-5  /*!< illegal state                   */
+#define HAPTIC_ILL_ADDR			-6  /*!< illegal address                 */
+#define HAPTIC_ILL_IO			-7  /*!< illegal I/O operation           */
+#define HAPTIC_NO_RESOURCE		-8  /*!< insufficient resource           */
+#define HAPTIC_NOT_SUPPORTED	-9  /*!< not supported                   */
+#define HAPTIC_ERR_PLATFORM		-10 /*!< platform or porting layer error */
+#define HAPTIC_ERR_IO			-11 /*!< general I/O system error        */
 
 //! script type - a table of register address/value pairs
 struct scr_type {
@@ -131,8 +144,10 @@ struct gpi_ctl {
 
 //! actuator description structure
 struct haptic_driver {
-	int     dev_effect = 0;
-	int		dev_effects_max = 0;
+	int     dev_lib = 0;
+	int		dev_libs_max = 8;         // fixed for DRV2605L
+	int     dev_waveform = 0;
+	int		dev_waveforms_max = 128;  // fixed for DRV2605L
 	int     dev_script = 0;
 	int		dev_scripts_max = 0;
 	uint8_t dev_state = 0;
@@ -160,6 +175,7 @@ class Haptic_DRV2605 {
   int readWaveform(uint8_t reg, uint8_t *wave, uint8_t size);
   int setWaveform(uint8_t slot, uint8_t wave);
   int setWaveformLib(uint8_t lib);
+  int getWaveforms(void);
   int setScript(int num);
   int playScript(int num);
   int getScripts(void);
@@ -168,7 +184,11 @@ class Haptic_DRV2605 {
   int setRealtimeValue(uint8_t rtp);
   int setActuatorType(enum haptic_dev_t type);
   int go(void);
+  int goWait(void);
   int stop(void);
+  int playAudio(uint8_t vibectrl, uint8_t minlevel, uint8_t maxlevel, uint8_t mindrv, uint8_t maxdrv);
+  int stopAudio(void);
+
  private:
   uint8_t Haptic_I2C_Address = DRV2605_I2C_ADDR;
   int8_t _gp0_pin;
