@@ -32,3 +32,4 @@
 
 * [V_1.0.0](https://github.com/patternagents/Haptic_DRV2605L/) - initial release
 * [V_1.0.1](https://github.com/patternagents/Haptic_DRV2605L/) - added scripting
+* [V_1.0.2](https://github.com/patternagents/Haptic_DRV2605L/) - added complex
