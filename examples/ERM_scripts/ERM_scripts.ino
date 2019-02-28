@@ -1,5 +1,5 @@
 /*
- * complex : Arduino IDE Complex ERM example for TI DRV2605L
+ * complex : Arduino IDE Scripts ERM example for TI DRV2605L
  * 
  * Overview:
  * --------- 
@@ -7,7 +7,8 @@
  * several complex (scripted) sequences. The Haptic_DRV2605 library
  * employs a script player that allows for register writes and also
  * includes codes for goWait and Delay, to create complex vibration 
- * sequences with many different waveforms.
+ * sequences with many different waveforms. This example shows how 
+ * to add to add your own user scripts to use with the library.
  * 
  * Requirements:
  * -------------
@@ -65,12 +66,37 @@ Haptic_DRV2605 haptic;           // Basic I2C instance - only SDA/SCL pins used
 int           script;        // current script
 int           scripts_max;   // max scripts available
 
+// create your own script of register write commands
+// play sixteen waveform sequences, eight at a time
+const struct scr_type my_script[] = {
+	{DRV2605_REG_WAVESEQ1,        44}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ2,        45}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ3,        46}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ4,        47}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ5,        48}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ6,        49}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ7,        50}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ8,        51}, //! DRV2605 - 
+	{ACTUATOR_SCRIPT_GOWAIT,    0x00}, //! DRV2605 - go and wait
+	{ACTUATOR_SCRIPT_DELAY,     0xAA}, //! DRV2605 - delay a while
+	{DRV2605_REG_WAVESEQ1,       110}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ2,       111}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ3,       112}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ4,       113}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ5,       114}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ6,       115}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ7,       116}, //! DRV2605 - 
+	{DRV2605_REG_WAVESEQ8,       117}, //! DRV2605 - 
+	{ACTUATOR_SCRIPT_GOWAIT,    0x00}, //! DRV2605 - go and wait
+	{ACTUATOR_SCRIPT_END,       0x00}  //! DRV2605 - end of script flag
+};
+
 void setup() {
   Serial.begin(115200);
    while (!Serial) {
     ; // wait for serial port to connect. Needed to see startup messages...
   }
-  Serial.println("Haptic: Complex Sequence Tests");
+  Serial.println("Haptic: Add Custom Scripts Test");
   Serial.println("Haptic: Connect I2C pins to WIRE Pins (SDA, SCL)");
 
   // initialize the Haptic controller
@@ -83,6 +109,8 @@ void setup() {
       haptic.setActuatorType(ERM);              // pick an actuator type
       haptic.setMode(REGISTER_MODE);            // haptic effects triggered by I2C register write 
       scripts_max = haptic.getScripts();        // how many total scripts available?
+      haptic.addScript(scripts_max, my_script); // we'll add our own script
+      scripts_max = haptic.getScripts();        // now, how many total scripts available?
       script = ACTUATOR_SCRIPT_COMPLEX;         // start at the complex ones
   }       
 }

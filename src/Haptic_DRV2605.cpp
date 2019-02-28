@@ -16,6 +16,17 @@
 #include <Wire.h>
 #include "Haptic_DRV2605.h"
 
+//! ----------------------------
+//!   Default Scripts :
+//! 0 DRV2605 Reset/Init
+//! 1 DRV2605 LRA Motor Init
+//! 2 DRV2605 ERM Motor Init
+//! 3 DRV2605 ERM COIN Motor Init
+//! 4 DRV2605 LRA Calibrate
+//! 5 Complex Effect 1
+//! 6 Complex Effect 2
+//! 7 Complex Effect 3
+//! ----------------------------
 //! haptic_reset[] - DRV2605 reset & basic setup :
 //! (Actuator independent setup commands)
 const struct scr_type haptic_reset[] = {
@@ -97,7 +108,7 @@ const struct scr_type haptic_ERM_coin[] = {
 };
 #define SCRIPT_ERM_COIN 3
 
-//! haptic_LRA_basic[] - DRV2605 setup for LRA coin types :
+//! haptic_LRA_calibrate[] - DRV2605 setup for LRA coin types :
 //! register load table for basic device/actuator initialization 
 //! (Actuator dependent setup commands with auto-calibration)
 const struct scr_type haptic_LRA_calibrate[] = {
@@ -358,12 +369,12 @@ int Haptic_DRV2605::setActuatorType(enum haptic_dev_t type) {
     return(HAPTIC_SUCCESS);
 }
 
-int Haptic_DRV2605::writeWaveform(uint8_t reg, uint8_t *wave, uint8_t size) {
+int Haptic_DRV2605::writeWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size) {
 		Serial.println("ERROR DRV2605: Waveforms are FIXED in ROM, not changeable \n");
 		return(HAPTIC_FAIL);
 }
 
-int Haptic_DRV2605::readWaveform(uint8_t reg, uint8_t *wave, uint8_t size) {
+int Haptic_DRV2605::readWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size) {
 		Serial.println("ERROR DRV2605: Waveforms are FIXED in ROM, not readable \n");
 		return(HAPTIC_FAIL);
 }
@@ -415,7 +426,17 @@ int Haptic_DRV2605::playScript(int num) {
     return(writeRegScript(scriptList[num]));
 }
 
-/*! @brief goWait - trigger sequence play and return immediately
+int Haptic_DRV2605::addScript(int num, const struct scr_type script[]) {
+	if (num < 0 || num >= ACTUATOR_SCRIPT_MAX || ((actuator.dev_scripts_max+1) >= ACTUATOR_SCRIPT_MAX)) {
+		return(HAPTIC_ILL_ARG);
+	}
+	actuator.dev_script = num;
+	actuator.dev_scripts_max++;
+    scriptList[num] = script;
+    return(HAPTIC_SUCCESS);
+}
+
+/*! @brief go - trigger sequence play and return immediately
 */
 int Haptic_DRV2605::go(void) {
   writeReg(DRV2605_REG_GO, 1);
@@ -432,7 +453,7 @@ int Haptic_DRV2605::goWait(void) {
   return(HAPTIC_SUCCESS);
 }
 
-/*! @brief goWait - stop sequence play immediately
+/*! @brief stop - stop sequence play immediately
 */
 int Haptic_DRV2605::stop(void) {
   writeReg(DRV2605_REG_GO, 0);

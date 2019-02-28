@@ -13,6 +13,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "Arduino.h"
 #include <Wire.h>
 #include "Haptic_DRV2605_registers.h"
 
@@ -31,7 +32,7 @@
 #define ACTUATOR_ABS_MAX_mV			5000
 #define ACTUATOR_RESONANT_FREQ_Hz	180
 #define ACTUATOR_IMAX_mA			137
-#define ACTUATOR_IMPD_mOhm			(10500)			//! in milliOhm units 
+#define ACTUATOR_IMPD_mOhm			10500			//! in milliOhm units 
 #define ACTUATOR_RISE_TIME_mS       50              //! rise time in milliseconds
 #define ACTUATOR_BRAKE_TIME_mS      50              //! braking time in milliseconds
 #define ACTUATOR_GPI_0_MOD			DRV2605_SINGLE_PTN
@@ -47,9 +48,8 @@
 #define ACTUATOR_SCRIPT_GOWAIT		0xFD
 #define ACTUATOR_SCRIPT_DELAY		0xFE
 #define ACTUATOR_SCRIPT_END			0xFF
-#define ACTUATOR_SCRIPT_MAX			16
+#define ACTUATOR_SCRIPT_MAX			32
 #define ACTUATOR_SCRIPT_COMPLEX		 5          //! start of complex scripts
-
 //! ----------------------------------------------------------
 #define HAPTIC_CHIP_ID				0x07
 
@@ -171,14 +171,15 @@ class Haptic_DRV2605 {
   int writeRegBits(uint8_t reg, uint8_t mask, uint8_t bits);
   int writeRegBulk(uint8_t reg, uint8_t *dada, uint8_t size);
   int writeRegScript(const struct scr_type script[]);
-  int writeWaveform(uint8_t reg, uint8_t *wave, uint8_t size);
-  int readWaveform(uint8_t reg, uint8_t *wave, uint8_t size);
+  int writeWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size);
+  int readWaveformBulk(uint8_t reg, uint8_t *wave, uint8_t size);
   int setWaveform(uint8_t slot, uint8_t wave);
   int setWaveformLib(uint8_t lib);
   int getWaveforms(void);
   int setScript(int num);
   int playScript(int num);
   int getScripts(void);
+  int addScript(int num, const struct scr_type script[]);
   int getDeviceID(void);
   int setMode(enum op_mode mode);
   int setRealtimeValue(uint8_t rtp);
